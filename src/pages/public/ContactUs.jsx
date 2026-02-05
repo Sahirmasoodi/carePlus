@@ -1,9 +1,9 @@
 import React from "react";
-import { assets } from "../assets/assets_frontend/assets";
+import { assets } from "../../assets/assets_frontend/assets";
 
 const ContactUs = () => {
   return (
-    <div className="mt-5 md:my-20">
+    <div className="py-5 min-h-[84vh] md:mt-20">
       <div className="text-2xl text-center mb-5 md:mb-10">
         CONTACT <span className="font-bold">US</span>
       </div>
