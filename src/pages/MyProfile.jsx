@@ -1,62 +1,141 @@
-// import React, { useEffect, useState } from "react";
-// import { assets } from "../assets/assets_frontend/assets";
-// import { useDispatch, useSelector } from "react-redux";
-// import { editEmail, editName, editPhone } from "../store/slices/userSlice";
-// import { useNavigate } from "react-router-dom";
-// const MyProfile = () => {
-//   const selector = useSelector((state) => state.user.userData);
-//   const loggedIn = useSelector((state) => state.user.loggedIn);
-//   const [edit, setEdit] = useState();
-//   const dispatch = useDispatch()
-//   const navigate = useNavigate()
-  
-//   // useEffect(()=>{
-//   //   !loggedIn && navigate('/home')
-//   //  },[selector,loggedIn])
-//   return (
-//     <div className="flex justify-center">
-//       <div className="flex flex-col items-center md:items-start my-10">
-//         <img className="w-60 rounded-lg" src={assets.profile_pic} />
-//         <div className="w-1/2 min-w-60 mt-5 md:mt-10 flex flex-col gap-4">
-//           <div >
-//             {edit ? <input className="bg-gray-200 text-2xl h-10" value={selector && selector.fullName} onChange={(e)=>dispatch(editName({fullName:e.target.value}))}/>
-//              : <p className="text-2xl underline">{selector.fullName.toUpperCase()}</p>}
-//           </div>
-//           <div className="text-gray-600">
-//             <p className="mb-1 underline t">CONTACT INFORMATION</p>
-//             <div className=" flex gap-5 ">
-//             <label className="w-12">Email:</label>
-//             {edit ? <input className="bg-gray-200" value={ selector && selector.email} onChange={(e)=>dispatch(editEmail({email:e.target.value}))}/>
-//              : <p className="">{selector.email}</p>}
-//           </div>
-//             <div className="w-1/5 flex gap-5">
-//             <label className="w-12">Contact:</label>
-//             {edit ? <input className="bg-gray-200" value={selector && selector.phone} onChange={(e)=>dispatch(editPhone({phone:e.target.value}))}/>
-//              : <p className="">{selector.phone}</p>}
-//           </div>
-//           </div>
-//         </div>
-//         <div className="flex gap-4 mt-5">
-//           <button className="px-4 py-2 bg-gray-200 hover:bg-gray-400 rounded-sm" onClick={()=>setEdit(true)}>Edit</button>
-//           <button className="px-4 py-2 bg-gray-200 hover:bg-gray-400 rounded-sm" onClick={()=>setEdit(false)}>Save Changes</button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default MyProfile;
-
-import React from 'react'
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProfile } from "../store/slices/profile/profile.thunk";
+import MedLoader from "../components/Loader";
 
 const MyProfile = () => {
+  const dispatch = useDispatch();
+
+  const { profile, loading } = useSelector((store) => store.common.profile);
+
+  useEffect(() => {
+    dispatch(fetchProfile());
+  }, [dispatch]);
+
+  if (loading) {
+    return <MedLoader />;
+  }
+
+  if (!profile) {
+    return (
+      <div className="flex items-center justify-center h-[70vh]">
+        <p className="text-gray-500 text-lg">No profile data found</p>
+      </div>
+    );
+  }
+
   return (
-    <div className='h-[80vh]'>
-      MyProfile
-MyProfile
+    <div className="min-h-[85vh] pt-6">
+      <div className=" mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div className="bg-gradient-to-r from-[#5F6FFF] to-indigo-600 p-6 text-white">
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <div className="w-28 h-28 rounded-full bg-white flex items-center justify-center overflow-hidden border-4 border-white">
+              {profile.profileImage ? (
+                <img
+                  src={profile.profileImage}
+                  alt="profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-4xl font-bold text-blue-600 uppercase">
+                  {profile.firstName?.charAt(0)}
+                </span>
+              )}
+            </div>
+
+            <div className="text-center md:text-left">
+              <h2 className="text-2xl md:text-3xl font-bold capitalize">
+                {profile.firstName} {profile.lastName}
+              </h2>
+
+              <span className="inline-block mt-2 px-4 py-1 bg-white text-blue-700 text-sm font-semibold rounded-full capitalize">
+                {profile.role}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 md:p-8">
+          <h3 className="text-lg font-semibold mb-4 text-gray-700">
+            Personal Information
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <InfoCard label="Email" value={profile.email} />
+            <InfoCard label="Phone" value={profile.phone || "Not Provided"} />
+            <InfoCard label="Gender" value={profile.gender || "Not Provided"} />
+            <InfoCard label="Age" value={profile.age || "Not Provided"} />
+
+            {profile.department && (
+              <InfoCard label="Department" value={profile.department} />
+            )}
+
+            {profile.specialization && (
+              <InfoCard label="Specialization" value={profile.specialization} />
+            )}
+
+            {profile.experience && (
+              <InfoCard
+                label="Experience"
+                value={`${profile.experience} Years`}
+              />
+            )}
+
+            {profile.licenseNumber && (
+              <InfoCard label="License Number" value={profile.licenseNumber} />
+            )}
+
+            <InfoCard
+              label="Availability"
+              value={profile.isAvailable ? "Available" : "Not Available"}
+            />
+          </div>
+
+          {profile.availableDays?.length > 0 && (
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-2 text-gray-700">
+                Available Days
+              </h3>
+
+              <div className="flex flex-wrap gap-2">
+                {profile.availableDays.map((day) => (
+                  <span
+                    key={day}
+                    className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm"
+                  >
+                    {day}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {profile.availableTime && (
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-2 text-gray-700">
+                Available Time
+              </h3>
+
+              <p className="text-gray-600">
+                {profile.availableTime.from} - {profile.availableTime.to}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default MyProfile
+const InfoCard = ({ label, value }) => {
+  return (
+    <div className="bg-gray-50 p-4 rounded-lg border">
+      <p className="text-sm text-gray-500">{label}</p>
+      <p className="text-base font-semibold text-gray-800 capitalize">
+        {value}
+      </p>
+    </div>
+  );
+};
 
+export default MyProfile;

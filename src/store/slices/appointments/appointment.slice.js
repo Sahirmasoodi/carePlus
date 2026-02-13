@@ -4,7 +4,7 @@ import { myAppointments } from "./appointment.thunk";
 const appointmentSlice = createSlice({
   name: "appointment",
   initialState: {
-    appointments: null,
+    appointments: [],
     loading: false,
     error: null,
   },

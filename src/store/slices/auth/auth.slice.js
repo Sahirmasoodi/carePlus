@@ -1,21 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser, signupUser ,logoutUser} from "./auth.thunk";
+import { loginUser, signupUser, logoutUser } from "./auth.thunk";
+
+const initialState = {
+  user: null,
+  loading: false,
+  error: null,
+  isAuthenticated: false,
+};
 
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    user: null,
-    loading: false,
-    error: null,
-    isAuthenticated: false,
+  initialState,
+
+  reducers: {
+    resetAuthState: () => initialState,
   },
-  // reducers: {
-  //   logout: () => {
-  //     ((state.user = null), (state.isAuthenticated = false));
-  //   },
-  // },
+
   extraReducers: (builder) => {
     builder
+      // LOGIN
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -30,6 +33,8 @@ const authSlice = createSlice({
         state.error = action.payload?.data;
         state.isAuthenticated = false;
       })
+
+      // SIGNUP
       .addCase(signupUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -44,22 +49,21 @@ const authSlice = createSlice({
         state.error = action.payload?.data;
         state.isAuthenticated = false;
       })
+
+      // LOGOUT
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(logoutUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = null;
-        state.isAuthenticated = false;
+      .addCase(logoutUser.fulfilled, (state) => {
+        return initialState;  
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.data;
-        state.isAuthenticated = false;
-      })
+      });
   },
 });
 
-// export const { logout } = authSlice.actions;
+export const { resetAuthState } = authSlice.actions;
 export default authSlice.reducer;

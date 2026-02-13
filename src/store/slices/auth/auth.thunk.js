@@ -43,3 +43,35 @@ export const logoutUser = createAsyncThunk(
     }
   },
 );
+
+export const verifyUser = createAsyncThunk(
+  "verify/user",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${BACKEND_BASE_URL}/verify-user`,
+        {},
+        { withCredentials: true },
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Something went wrong");
+    }
+  },
+);
+
+export const refreshUserToken = createAsyncThunk(
+  "refresh/token",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${BACKEND_BASE_URL}/refresh-token`,
+        {},
+        { withCredentials: true },
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Something went wrong");
+    }
+  },
+);

@@ -1,24 +1,20 @@
-import { Outlet, Navigate } from "react-router-dom";
+import React from "react";
+import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Footer from "../components/Footer";
 import Navbar from "../components/Navbar/Navbar";
-
+import Footer from "../components/Footer";
 const RoleLayout = () => {
-  const { user } = useSelector((state) => state?.common?.auth);
+  const { user } = useSelector((state) => state.common.auth);
 
-  if (!user) return <Navigate to="/login" />;
-
-  if (user) {
-    return (
-      <>
-        <Navbar role={user?.role} />
+  return (
+    <>
+      <Navbar role={user?.role} />
+      <div className="min-h-[80vh]">
         <Outlet />
-        <Footer/>
-      </>
-    );
-  }
-
-  return <Navigate to="/login" />;
+      </div>
+      <Footer />
+    </>
+  );
 };
 
 export default RoleLayout;

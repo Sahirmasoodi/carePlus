@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar/Navbar";
 const PublicLayout = () => {
   return (
     <>
-     <Navbar role="public"/>
+      <Navbar role="public" />
       <Outlet />
     </>
   );

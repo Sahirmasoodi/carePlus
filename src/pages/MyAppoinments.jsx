@@ -1,75 +1,130 @@
-// import React, { useEffect } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { addBooking , removeBooking } from "../store/slices/userSlice";
-// import { Link, useNavigate } from "react-router-dom";
-
-// const MyAppoinments = () => {
-//   const bookings = useSelector((state) => state.user.booking);
-//   const loggedIn = useSelector((state) => state.user.loggedIn);
-//   const dispatch = useDispatch()
-//   const navigate = useNavigate()
-//   useEffect(()=>{
-//     !loggedIn &&
-//     navigate('/')
-//   },[loggedIn])
-
-//   return (
-//     <div className="mt-5 md:mb-[30vh]">
-//       <p className="text-xl ">My appointments</p>
-//       {bookings  &&
-//         bookings.map((booking,index)=>(
-//          <div key={booking?.doctor._id+index} className="flex flex-col md:flex-row items-center md:items-end justify-between mt-5 md:mt-10  border rounded-lg p-3 md:p-6 shadow-lg">
-//           <div className="flex  flex-col md:flex-row gap-4">
-//             <div className="bg-blue-100 rounded-lg">
-//               <img className="w-36" src={booking?.doctor.image} />
-//             </div>
-//             <div>
-//               <h3 className="text-md font-semibold text-gray-800">{booking?.doctor?.name}</h3>
-//               <p className=" text-gray-500">{booking?.doctor?.speciality}</p>
-//              <div className="text-gray-500">
-//                 <p className="mt-3">Address:</p>
-//                 <p>{booking?.doctor?.address?.line1}</p>
-//                 <p>{booking?.doctor?.address?.line2}</p>
-//              </div>
-//               <div className="mt-3">
-//                 <span className="font-semibold me-2">Date & Time:</span>
-//                 <span className="text-gray-500 me-1">{booking.day}</span>
-//                 <span className="font-bold">|</span>
-//                 <span className="text-gray-500 ms-1">{booking.time}</span>
-//               </div>
-//             </div>
-//           </div>
-//           <button onClick={()=>dispatch(removeBooking(index))}
-//             className="px-4  py-2 h-10 bg-gray-200 hover:bg-gray-400 hover:text-white rounded-sm">Cancel appointment</button>
-//         </div>
-//         ))
-
-//       }
-
-//       {   bookings.length ==0 && <div className="flex flex-col md:flex-row justify-center items-center md:gap-2 mt-10">
-//       <span className=" text-gray-500 text-center">You don't have any appointments at the moment</span>
-//       <Link className="font-bold" to={'/doctors'}>Book an appointment?</Link>
-//       </div>
-
-//       }
-
-//     </div>
-//   );
-// };
-
-// export default MyAppoinments;
-
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { myAppointments } from "../store/slices/appointments/appointment.thunk";
+import MedLoader from "../components/Loader";
+
+const formatDate = (date) => {
+  return new Date(date).toLocaleString("en-IN", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+};
+
+const getStatusStyle = (status) => {
+  switch (status) {
+    case "pending":
+      return "bg-yellow-100 text-yellow-700";
+    case "confirmed":
+      return "bg-green-100 text-green-700";
+    case "completed":
+      return "bg-blue-100 text-blue-700";
+    case "cancelled":
+      return "bg-red-100 text-red-700";
+    default:
+      return "bg-gray-100 text-gray-700";
+  }
+};
+
 const MyAppoinments = () => {
+  const { appointments, loading } = useSelector(
+    (state) => state?.common?.appointment,
+  );
+
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(myAppointments());
-  }, []);
+  }, [dispatch]);
 
-  return <div className="h-[80vh]">MyAppoinments MyAppoinments</div>;
+  if (loading) {
+    return (
+      <MedLoader/>
+    );
+  }
+
+  return (
+    <div className="min-h-[80vh] py-6">
+      <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+        My Appointments
+      </h2>
+
+      {!appointments || appointments.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-[60vh] text-gray-500">
+          <p className="text-lg">No appointments found</p>
+          <p className="text-sm mt-2">
+            Your upcoming appointments will appear here
+          </p>
+        </div>
+      ) : (
+        <div className="grid md:grid-cols-2 gap-6">
+          {appointments.map((apt) => (
+            <div
+              key={apt._id}
+              className="border rounded-xl p-5 shadow-sm bg-white hover:shadow-md transition"
+            >
+              <div className="flex justify-between items-start mb-3">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    Dr. {apt.doctor?.firstName} {apt.doctor?.lastName}
+                  </h3>
+
+                  <p className="text-sm text-gray-500">
+                    Patient: {apt.patient?.firstName} {apt.patient?.lastName}
+                  </p>
+                </div>
+
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${getStatusStyle(
+                    apt.status,
+                  )}`}
+                >
+                  {apt.status}
+                </span>
+              </div>
+
+              <div className="text-sm text-gray-600 space-y-1">
+                <p>
+                  <span className="font-medium">Start:</span>{" "}
+                  {formatDate(apt.appointmentStartTime)}
+                </p>
+
+                <p>
+                  <span className="font-medium">End:</span>{" "}
+                  {formatDate(apt.appointmentEndTime)}
+                </p>
+
+                <p>
+                  <span className="font-medium">Type:</span>{" "}
+                  <span className="capitalize">{apt.consultationType}</span>
+                </p>
+
+                <p>
+                  <span className="font-medium">Reason:</span> {apt.reason}
+                </p>
+              </div>
+
+              {apt.consultationType === "online" && apt.meetingLink && (
+                <div className="mt-4">
+                  <a
+                    href={apt.meetingLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 text-sm underline"
+                  >
+                    Join Meeting
+                  </a>
+                </div>
+              )}
+
+              <div className="mt-4 text-xs text-gray-400">
+                Created: {formatDate(apt.createdAt)}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default MyAppoinments;

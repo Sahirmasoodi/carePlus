@@ -6,6 +6,7 @@ import { navConfig } from "./navConfig";
 import { useDispatch, useSelector } from "react-redux";
 import LogoutPopup from "../LogoutPopup";
 import { logoutUser } from "../../store/slices/auth/auth.thunk";
+import { resetAuthState } from "../../store/slices/auth/auth.slice";
 
 const Navbar = ({ role = "public" }) => {
   const navData = navConfig[role];
@@ -16,7 +17,8 @@ const Navbar = ({ role = "public" }) => {
   const dispatch = useDispatch();
   const handleLogout = async () => {
     try {
-      await dispatch(logoutUser()).unwrap()
+      await dispatch(logoutUser()).unwrap();
+      dispatch(resetAuthState());
       setShowLogout(false);
       popMessage("Logged out successfully");
     } catch (error) {
