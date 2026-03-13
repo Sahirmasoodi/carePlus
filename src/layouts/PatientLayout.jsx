@@ -1,14 +1,11 @@
-import React from "react";
 import { Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
 import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer";
-const RoleLayout = () => {
-  const { user } = useSelector((state) => state.common.auth);
 
+const PatientLayout = () => {
   return (
     <>
-      <Navbar role={user?.role} />
+      <Navbar role="patient" />
       <div className="min-h-[80vh]">
         <Outlet />
       </div>
@@ -17,4 +14,4 @@ const RoleLayout = () => {
   );
 };
 
-export default RoleLayout;
+export default PatientLayout;
