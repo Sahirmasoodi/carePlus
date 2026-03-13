@@ -1,40 +1,59 @@
 import React from "react";
 import { assets } from "../assets/assets_frontend/assets";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
-    const navigate = useNavigate()
   return (
-    <div className="mt-10 border-t-2">
-    <div className="mt-5 flex justify-between flex-wrap gap-5 p-10">
-      <div className="w-1/3 min-w-60 ">
-        <img className="w-52" src={assets.logo} />
-        <p className="text-sm text-gray-600">
-          Convenient online doctor consultations and prescriptions at your
-          fingertips. Book, consult, and get your prescriptions—all from home.
-        </p>
+    <footer className="mt-16 border-t">
+      <div className=" mx-auto px-6 py-12 grid gap-10 md:grid-cols-3">
+        <div>
+          <img className="w-44 mb-4" src={assets.logo} alt="Prescripto" />
+          <p className="text-gray-600 text-sm leading-relaxed">
+            Convenient online doctor consultations and prescriptions at your
+            fingertips. Book appointments, consult doctors, and manage your
+            health records — all from the comfort of your home.
+          </p>
+        </div>
+        <div>
+          <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
+          <ul className="space-y-2 text-gray-600 text-sm">
+            <li>
+              <Link to="/home" className="hover:text-primary transition">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/doctors" className="hover:text-primary transition">
+                Doctors
+              </Link>
+            </li>
+            <li>
+              <Link to="/about-us" className="hover:text-primary transition">
+                About Us
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact-us" className="hover:text-primary transition">
+                Contact Us
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 className="font-semibold text-lg mb-4">Get in Touch</h3>
+          <ul className="space-y-2 text-gray-600 text-sm">
+            <li>+91 7051747966</li>
+            <li>prescripto@yahoo.com</li>
+            <li>Srinagar, Jammu & Kashmir</li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <p className="font-bold mb-3">COMPANY</p>
-        <ul className="text-sm text-gray-600">
-          <li onClick={()=>navigate('/')}>Home</li>
-          <li onClick={()=>navigate('/about-us')}>About us</li>
-          <li onClick={()=>navigate('/contact-us')}>Contact us</li>
-          <li>Privacy policy</li>
-        </ul>
+
+      <div className="border-t text-center text-gray-500 text-sm py-4">
+        © {new Date().getFullYear()} Prescripto — All Rights Reserved
       </div>
-      <div>
-        <p className="font-bold mb-3">GET IN TOUCH</p>
-        <ul className="text-sm text-gray-600 list-none">
-          <li>+917051747966</li>
-          <li>prescripto@yahoo.com</li>
-        </ul>
-      </div>
-    </div>
-    <div className="border-t-2 text-center text-gray-500 mt-5 text-sm ">
-    Copyright © 2024 sahir - All Right Reserved
-    </div>
-    </div>
+    </footer>
   );
 };
 

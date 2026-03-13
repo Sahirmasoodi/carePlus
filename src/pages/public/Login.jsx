@@ -26,8 +26,11 @@ const Login = () => {
   const { user, loading, error } = useSelector((state) => state?.common?.auth);
 
   useEffect(() => {
+    if (user?.role == "admin") {
+      navigate("/admin/dashboard");
+    }
     if (user?.role == "patient") {
-      navigate("/home");
+      navigate("/patient/home");
     }
     if (user?.role == "doctor") {
       navigate("/doc-home");
