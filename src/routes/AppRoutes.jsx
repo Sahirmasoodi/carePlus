@@ -11,7 +11,7 @@ import Login from "../pages/public/Login";
 import AboutUs from "../pages/public/AboutUs";
 import ContactUs from "../pages/public/ContactUs";
 
-import Home from "../pages/Home";
+import Home from "../pages/public/Home";
 import Doctors from "../pages/Doctors";
 import MyProfile from "../pages/MyProfile";
 import MyAppointments from "../pages/MyAppoinments";
