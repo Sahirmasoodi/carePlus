@@ -28,8 +28,9 @@ import {
   BsEyeSlash,
 } from "react-icons/bs";
 import { RiMedalLine } from "react-icons/ri";
+import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Footer";
 
-/* ─── Helpers ──────────────────────────────────────────────── */
 const formatDate = (d) =>
   new Date(d).toLocaleDateString("en-IN", {
     day: "numeric",
@@ -43,8 +44,6 @@ const GenderIcon = ({ gender }) =>
   ) : (
     <BsGenderMale className="text-sky-400" />
   );
-
-/* ─── Info row ─────────────────────────────────────────────── */
 const InfoRow = ({ icon, label, value }) => (
   <div className="flex items-center gap-4 py-3.5 border-b border-gray-50 last:border-0">
     <div className="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0 text-indigo-400 text-base">
@@ -86,7 +85,7 @@ const inputCls = (err) =>
 const Modal = ({ title, onClose, children }) => (
   <div
     className="fixed inset-0 z-50 flex items-center justify-center px-4"
-    style={{ background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)" }}
+    style={{ background: "rgba(0,0,0,0.35)", backdropFilter: "blur(10px)" }}
   >
     <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
       <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-50">
@@ -105,7 +104,6 @@ const Modal = ({ title, onClose, children }) => (
   </div>
 );
 
-/* ─── Select styling ───────────────────────────────────────── */
 const selectStyle = {
   backgroundImage:
     "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E\")",
@@ -117,14 +115,12 @@ const selectStyle = {
 
 const DAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
-/* ─── Section heading inside modal ─────────────────────────── */
 const ModalSection = ({ title }) => (
   <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 pt-2 border-t border-gray-100">
     {title}
   </p>
 );
 
-/* ─── Edit Profile Modal ────────────────────────────────────── */
 const EditProfileModal = ({ profile, onClose }) => {
   const dispatch = useDispatch();
   const { updateLoading, updateError, updateSuccess } = useSelector(
@@ -205,7 +201,6 @@ const EditProfileModal = ({ profile, onClose }) => {
   return (
     <Modal title="Edit Profile" onClose={onClose}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* ── Basic ── */}
         <ModalSection title="Basic Info" />
 
         <div className="grid grid-cols-2 gap-3">
@@ -232,7 +227,6 @@ const EditProfileModal = ({ profile, onClose }) => {
             >
               <option value="male">Male</option>
               <option value="female">Female</option>
-              <option value="other">Other</option>
             </select>
           </Field>
           <Field label="Age" error={errors.age?.message}>
@@ -261,8 +255,6 @@ const EditProfileModal = ({ profile, onClose }) => {
             placeholder="+91 9876543210"
           />
         </Field>
-
-        {/* ── Doctor-only fields ── */}
         {isDoctor && (
           <>
             <ModalSection title="Professional" />
@@ -523,7 +515,6 @@ const ChangePasswordModal = ({ onClose }) => {
   );
 };
 
-/* ─── No profile ────────────────────────────────────────────── */
 const NoProfile = () => (
   <div className="flex flex-col items-center justify-center h-[70vh] gap-3">
     <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
@@ -574,222 +565,229 @@ const MyProfile = () => {
   const isFemale = gender === "female";
 
   return (
-    <div className="min-h-screen py-8">
-      <div className="mx-auto space-y-5">
-        {/* ── Hero card ─────────────────────────────── */}
-        <div className="relative bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/60 overflow-hidden">
-          <div className="h-28 bg-[#606FFD]" />
-          <div className="px-6 pb-4">
-            <div className="flex items-end justify-between -mt-14 mb-4">
-              <div
-                className={`w-24 h-24 rounded-3xl border-4 border-white shadow-lg overflow-hidden flex items-center justify-center flex-shrink-0
+    <>
+      <Navbar role={role} />
+
+      <div className="min-h-screen py-8">
+        <div className="mx-auto space-y-5">
+          {/* ── Hero card ─────────────────────────────── */}
+          <div className="relative bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/60 overflow-hidden">
+            <div className="h-28 bg-[#606FFD]" />
+            <div className="px-6 pb-4">
+              <div className="flex items-end justify-between -mt-14 mb-4">
+                <div
+                  className={`w-24 h-24 rounded-3xl border-4 border-white shadow-lg overflow-hidden flex items-center justify-center flex-shrink-0
                 ${isFemale ? "bg-rose-100" : "bg-sky-100"}`}
-              >
-                {profileImage ? (
-                  <img
-                    src={profileImage}
-                    alt={fullName}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span
-                    className={`text-4xl font-extrabold ${isFemale ? "text-rose-400" : "text-indigo-400"}`}
-                  >
-                    {initials}
-                  </span>
-                )}
+                >
+                  {profileImage ? (
+                    <img
+                      src={profileImage}
+                      alt={fullName}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span
+                      className={`text-4xl font-extrabold ${isFemale ? "text-rose-400" : "text-indigo-400"}`}
+                    >
+                      {initials}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
 
-            <div className="flex items-center justify-between flex-wrap gap-2 mb-5">
-              <div>
-                <h1 className="text-2xl font-extrabold text-gray-900 capitalize leading-tight">
-                  {fullName}
-                </h1>
-                <p className="text-sm text-indigo-500 font-medium capitalize mt-0.5">
-                  {role}
-                </p>
-              </div>
-              <span
-                className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border
-                ${isAvailable ? "bg-emerald-50 text-emerald-600 border-emerald-100" : "bg-red-50 text-red-500 border-red-100"}`}
-              >
+              <div className="flex items-center justify-between flex-wrap gap-2 mb-5">
+                <div>
+                  <h1 className="text-2xl font-extrabold text-gray-900 capitalize leading-tight">
+                    {fullName}
+                  </h1>
+                  <p className="text-sm text-indigo-500 font-medium capitalize mt-0.5">
+                    {role}
+                  </p>
+                </div>
                 <span
-                  className={`w-2 h-2 rounded-full ${isAvailable ? "bg-emerald-400 animate-pulse" : "bg-red-400"}`}
-                />
-                {isAvailable ? "Available" : "Not Available"}
-              </span>
-            </div>
+                  className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border
+                ${isAvailable ? "bg-emerald-50 text-emerald-600 border-emerald-100" : "bg-red-50 text-red-500 border-red-100"}`}
+                >
+                  <span
+                    className={`w-2 h-2 rounded-full ${isAvailable ? "bg-emerald-400 animate-pulse" : "bg-red-400"}`}
+                  />
+                  {isAvailable ? "Available" : "Not Available"}
+                </span>
+              </div>
 
-            <div className="flex gap-3 pb-2">
-              <button
-                onClick={() => setShowEdit(true)}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-2xl text-sm font-semibold
+              <div className="flex gap-3 pb-2">
+                <button
+                  onClick={() => setShowEdit(true)}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-2xl text-sm font-semibold
                             bg-[#606FFD] hover:opacity-80 text-white
                             shadow-md shadow-indigo-200 transition-all active:scale-[0.98]"
-              >
-                <HiOutlinePencil /> Edit Profile
-              </button>
-              <button
-                onClick={() => setShowPw(true)}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-2xl text-sm font-semibold
+                >
+                  <HiOutlinePencil /> Edit Profile
+                </button>
+                <button
+                  onClick={() => setShowPw(true)}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-2xl text-sm font-semibold
                            bg-gray-50 text-gray-700 border border-gray-200
                            hover:bg-gray-100 transition-all active:scale-[0.98]"
-              >
-                <MdOutlineLock /> Change Password
-              </button>
+                >
+                  <MdOutlineLock /> Change Password
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* ── Personal info ──────────────────────────── */}
-        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/40 p-6">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-1">
-            Personal Info
-          </p>
-          <InfoRow
-            icon={<HiOutlineMail />}
-            label="Email"
-            value={email || "—"}
-          />
-          <InfoRow
-            icon={<GenderIcon gender={gender} />}
-            label="Gender"
-            value={gender || "Not provided"}
-          />
-          {age && (
-            <InfoRow
-              icon={<HiOutlineUser />}
-              label="Age"
-              value={`${age} years`}
-            />
-          )}
-          {phone && (
-            <InfoRow icon={<HiOutlineUser />} label="Phone" value={phone} />
-          )}
-        </div>
-
-        {/* ── Professional ───────────────────────────── */}
-        {(department || specialization || experience || licenseNumber) && (
+          {/* ── Personal info ──────────────────────────── */}
           <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/40 p-6">
             <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-1">
-              Professional
+              Personal Info
             </p>
-            {department && (
+            <InfoRow
+              icon={<HiOutlineMail />}
+              label="Email"
+              value={email || "—"}
+            />
+            <InfoRow
+              icon={<GenderIcon gender={gender} />}
+              label="Gender"
+              value={gender || "Not provided"}
+            />
+            {age && (
               <InfoRow
-                icon={<HiOutlineShieldCheck />}
-                label="Department"
-                value={department}
+                icon={<HiOutlineUser />}
+                label="Age"
+                value={`${age} years`}
               />
             )}
-            {specialization && (
-              <InfoRow
-                icon={<RiMedalLine />}
-                label="Specialization"
-                value={specialization}
-              />
+            {phone && (
+              <InfoRow icon={<HiOutlineUser />} label="Phone" value={phone} />
             )}
-            {experience && (
+          </div>
+
+          {/* ── Professional ───────────────────────────── */}
+          {(department || specialization || experience || licenseNumber) && (
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/40 p-6">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-1">
+                Professional
+              </p>
+              {department && (
+                <InfoRow
+                  icon={<HiOutlineShieldCheck />}
+                  label="Department"
+                  value={department}
+                />
+              )}
+              {specialization && (
+                <InfoRow
+                  icon={<RiMedalLine />}
+                  label="Specialization"
+                  value={specialization}
+                />
+              )}
+              {experience && (
+                <InfoRow
+                  icon={<HiOutlineCalendar />}
+                  label="Experience"
+                  value={`${experience} Years`}
+                />
+              )}
+              {licenseNumber && (
+                <InfoRow
+                  icon={<HiOutlineShieldCheck />}
+                  label="License No."
+                  value={licenseNumber}
+                />
+              )}
+            </div>
+          )}
+
+          {/* ── Qualifications ─────────────────────────── */}
+          {qualification.length > 0 && (
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/40 p-6">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
+                Qualifications
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {qualification.map((q, i) => (
+                  <span
+                    key={i}
+                    className="px-3 py-1 bg-indigo-50 text-indigo-600 border border-indigo-100 rounded-full text-xs font-semibold"
+                  >
+                    {q}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── Available days ─────────────────────────── */}
+          {availableDays.length > 0 && (
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/40 p-6">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
+                Available Days
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
+                  (day) => {
+                    const active = availableDays.some((d) =>
+                      d.toLowerCase().startsWith(day.toLowerCase()),
+                    );
+                    return (
+                      <span
+                        key={day}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold border
+                    ${active ? "bg-emerald-50 text-emerald-600 border-emerald-200" : "bg-gray-50 text-gray-300 border-gray-100"}`}
+                      >
+                        {day}
+                      </span>
+                    );
+                  },
+                )}
+              </div>
+              {availableTime && (
+                <p className="text-xs text-gray-400 mt-3">
+                  <span className="font-semibold text-gray-600">
+                    {availableTime.from}
+                  </span>
+                  {" — "}
+                  <span className="font-semibold text-gray-600">
+                    {availableTime.to}
+                  </span>
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* ── Account ────────────────────────────────── */}
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/40 p-6">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-1">
+              Account
+            </p>
+            {createdAt && (
               <InfoRow
                 icon={<HiOutlineCalendar />}
-                label="Experience"
-                value={`${experience} Years`}
+                label="Member since"
+                value={formatDate(createdAt)}
               />
             )}
-            {licenseNumber && (
+            {updatedAt && (
               <InfoRow
-                icon={<HiOutlineShieldCheck />}
-                label="License No."
-                value={licenseNumber}
+                icon={<HiOutlineCalendar />}
+                label="Last updated"
+                value={formatDate(updatedAt)}
               />
             )}
           </div>
-        )}
-
-        {/* ── Qualifications ─────────────────────────── */}
-        {qualification.length > 0 && (
-          <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/40 p-6">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
-              Qualifications
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {qualification.map((q, i) => (
-                <span
-                  key={i}
-                  className="px-3 py-1 bg-indigo-50 text-indigo-600 border border-indigo-100 rounded-full text-xs font-semibold"
-                >
-                  {q}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* ── Available days ─────────────────────────── */}
-        {availableDays.length > 0 && (
-          <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/40 p-6">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
-              Available Days
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => {
-                const active = availableDays.some((d) =>
-                  d.toLowerCase().startsWith(day.toLowerCase()),
-                );
-                return (
-                  <span
-                    key={day}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold border
-                    ${active ? "bg-emerald-50 text-emerald-600 border-emerald-200" : "bg-gray-50 text-gray-300 border-gray-100"}`}
-                  >
-                    {day}
-                  </span>
-                );
-              })}
-            </div>
-            {availableTime && (
-              <p className="text-xs text-gray-400 mt-3">
-                <span className="font-semibold text-gray-600">
-                  {availableTime.from}
-                </span>
-                {" — "}
-                <span className="font-semibold text-gray-600">
-                  {availableTime.to}
-                </span>
-              </p>
-            )}
-          </div>
-        )}
-
-        {/* ── Account ────────────────────────────────── */}
-        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/40 p-6">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-1">
-            Account
-          </p>
-          {createdAt && (
-            <InfoRow
-              icon={<HiOutlineCalendar />}
-              label="Member since"
-              value={formatDate(createdAt)}
-            />
-          )}
-          {updatedAt && (
-            <InfoRow
-              icon={<HiOutlineCalendar />}
-              label="Last updated"
-              value={formatDate(updatedAt)}
-            />
-          )}
         </div>
+        {showEdit && (
+          <EditProfileModal
+            profile={profile}
+            onClose={() => setShowEdit(false)}
+          />
+        )}
+        {showPw && <ChangePasswordModal onClose={() => setShowPw(false)} />}
       </div>
-      {showEdit && (
-        <EditProfileModal
-          profile={profile}
-          onClose={() => setShowEdit(false)}
-        />
-      )}
-      {showPw && <ChangePasswordModal onClose={() => setShowPw(false)} />}
-    </div>
+      <Footer />
+    </>
   );
 };
 
