@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="mt-16 border-t">
+    <footer className=" border-t ">
       <div className=" mx-auto px-6 py-12 grid gap-10 md:grid-cols-3">
         <div>
           <img className="w-44 mb-4" src={assets.logo} alt="Prescripto" />

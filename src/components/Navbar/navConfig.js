@@ -9,7 +9,7 @@ export const navConfig = {
   doctor: [
 
     { label: "Dashboard", path: "/doc/dashboard" },
-    { label: "Profile", path: "/doc/profile" },
+    { label: "Profile", path: "/profile" },
     { label: "Appointments", path: "/doc/appointments" },
   ],
 
@@ -24,6 +24,6 @@ export const navConfig = {
     { label: "Dashboard", path: "/admin/dashboard" },
     { label: "Doctors", path: "/admin/doctors" },
     { label: "Paients", path: "/admin/users" },
-    { label: "My Profile", path: "/my-profile" },
+    { label: "My Profile", path: "/profile" },
   ],
 };
