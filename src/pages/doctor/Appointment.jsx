@@ -129,7 +129,7 @@
 
 import React from 'react'
 
-const Appointment = () => {
+const DocAppointment = () => {
   return (
     <div className='h-[90vh]'>
       docotr appointedDoctor
@@ -137,5 +137,5 @@ const Appointment = () => {
   )
 }
 
-export default Appointment
+export default DocAppointment
 

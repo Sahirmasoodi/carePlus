@@ -1,11 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Belleza&family=Neucha&family=Outfit:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Belleza&family=Neucha&family=Outfit:wght@100..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-*{
-    font-family: Outfit;
+* {
+  font-family: Outfit;
 }
-.active{
-    border-bottom: 2px solid rgb(64, 58, 177);
+.active {
+  border-bottom: 2px solid rgb(64, 58, 177);
+}
+
+.heading-style {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }

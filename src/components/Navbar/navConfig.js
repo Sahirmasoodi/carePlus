@@ -3,12 +3,14 @@ export const navConfig = {
     { label: "Home", path: "/patient/home" },
     { label: "Doctors", path: "/doctors" },
     { label: "Appointments", path: "/my-appointments" },
-    { label: "Profile", path: "/my-profile" },
+    { label: "Profile", path: "/profile" },
   ],
 
   doctor: [
-    { label: "Profile", path: "/my-profile" },
-    { label: "Appointments", path: "/my-appointments" },
+
+    { label: "Dashboard", path: "/doc/dashboard" },
+    { label: "Profile", path: "/doc/profile" },
+    { label: "Appointments", path: "/doc/appointments" },
   ],
 
   public: [

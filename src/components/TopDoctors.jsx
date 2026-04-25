@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import TopDoctorCard from "./TopDoctorCard";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDoctorsThunk } from "../store/slices/public/public.thunk";
+import { fetchDoctorsForHomeThunk } from "../store/slices/public/public.thunk";
 
 const TopDoctors = () => {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const TopDoctors = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchDoctorsThunk());
+    dispatch(fetchDoctorsForHomeThunk());
   }, [dispatch]);
 
   if (loading) return <p>Loading...</p>;
