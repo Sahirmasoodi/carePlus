@@ -1,28 +1,86 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { myAppointments } from "./appointment.thunk";
+import {
+  createAppointmentThunk,
+  updateAppointmentThunk,
+  deleteAppointmentThunk,
+  fetchMyAppointmentsThunk,
+  fetchAllAppointmentsThunk,
+} from "./appointment.thunk";
+
+const initialState = {
+  appointments: [],
+  loading: false,
+  error: null,
+};
 
 const appointmentSlice = createSlice({
-  name: "appointment",
-  initialState: {
-    appointments: [],
-    loading: false,
-    error: null,
+  name: "appointments",
+  initialState,
+  reducers: {
+    clearAppointmentError: (state) => {
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(myAppointments.pending, (state) => {
+
+      // CREATE
+      .addCase(createAppointmentThunk.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
-      .addCase(myAppointments.fulfilled, (state, action) => {
+      .addCase(createAppointmentThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.appointments = action.payload?.data;
+        state.appointments.unshift(action.payload);
       })
-      .addCase(myAppointments.rejected, (state, action) => {
+      .addCase(createAppointmentThunk.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.data;
+        state.error = action.payload;
+      })
+
+      // UPDATE
+      .addCase(updateAppointmentThunk.fulfilled, (state, action) => {
+        const index = state.appointments.findIndex(
+          (a) => a._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.appointments[index] = action.payload;
+        }
+      })
+
+      // DELETE
+      .addCase(deleteAppointmentThunk.fulfilled, (state, action) => {
+        state.appointments = state.appointments.filter(
+          (a) => a._id !== action.payload
+        );
+      })
+
+      // FETCH MY
+      .addCase(fetchMyAppointmentsThunk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchMyAppointmentsThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.appointments = action.payload;
+      })
+      .addCase(fetchMyAppointmentsThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // FETCH ALL
+      .addCase(fetchAllAppointmentsThunk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchAllAppointmentsThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.appointments = action.payload;
+      })
+      .addCase(fetchAllAppointmentsThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
+export const { clearAppointmentError } = appointmentSlice.actions;
 export default appointmentSlice.reducer;

@@ -12,15 +12,18 @@ import AboutUs from "../pages/public/AboutUs";
 import ContactUs from "../pages/public/ContactUs";
 
 import Home from "../pages/public/Home";
-import Doctors from "../pages/Doctors";
-import MyProfile from "../pages/MyProfile";
-import MyAppointments from "../pages/MyAppoinments";
+import Doctors from "../pages/patient/Doctors";
+import MyProfile from "../pages/common/MyProfile";
+import MyAppointments from "../pages/patient/MyAppoinments";
 
 import DoctorHome from "../pages/doctor/DoctorHome";
 
 import ErrorPage from "../pages/ErrorPage";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import PatientHome from "../pages/patient/PatientHome";
+import SocketChat from "../pages/common/SocketChat";
+import CreateAppointment from "../pages/patient/CreateAppointment";
+import DocAppointment from "../pages/doctor/Appointment";
 
 const AppRoutes = () => {
   return (
@@ -37,16 +40,20 @@ const AppRoutes = () => {
         <Route element={<PatientLayout />}>
           <Route path="/patient/home" element={<PatientHome />} />
           <Route path="/doctors/:speciality?" element={<Doctors />} />
-          <Route path="/my-profile" element={<MyProfile />} />
+          <Route path="/profile" element={<MyProfile />} />
           <Route path="/my-appointments" element={<MyAppointments />} />
+          <Route path="/chat/:toUserId" element={<SocketChat />} />
+          <Route path="/create_appointment/:doctorId" element={<CreateAppointment />} />
+
         </Route>
       </Route>
 
       {/* Doctor Routes */}
       <Route element={<AuthGuard allowedRoles={["doctor"]} />}>
         <Route element={<DoctorLayout />}>
-          <Route path="/doctor/dashboard" element={<DoctorHome />} />
-          <Route path="/my-profile" element={<MyProfile />} />
+          <Route path="/doc/dashboard" element={<DoctorHome />} />
+          <Route path="/doc/profile" element={<MyProfile />} />
+          <Route path="/doc/appointments" element={<DocAppointment />} />
         </Route>
       </Route>
 

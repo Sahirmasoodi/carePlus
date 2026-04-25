@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchDoctorsForHomeThunk } from "./public.thunk";
+import { fetchDoctorsThunk } from "./patient.thunk";
 
 const initialState = {
   loading: false,
@@ -7,26 +7,26 @@ const initialState = {
   error: null,
 };
 
-const doctorsSlice = createSlice({
+const patientSlice = createSlice({
   name: "doctors",
   initialState,
   reducers: {},
 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchDoctorsForHomeThunk.pending, (state) => {
+      .addCase(fetchDoctorsThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchDoctorsForHomeThunk.fulfilled, (state, action) => {
+      .addCase(fetchDoctorsThunk.fulfilled, (state, action) => {
         state.loading = false;
         state.doctors = action.payload;
       })
-      .addCase(fetchDoctorsForHomeThunk.rejected, (state, action) => {
+      .addCase(fetchDoctorsThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
   },
 });
 
-export default doctorsSlice.reducer;
+export default patientSlice.reducer;

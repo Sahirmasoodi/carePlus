@@ -33,7 +33,7 @@ const Login = () => {
       navigate("/patient/home");
     }
     if (user?.role == "doctor") {
-      navigate("/doc-home");
+      navigate("/doc/dashboard");
     }
   }, [user, navigate]);
 
