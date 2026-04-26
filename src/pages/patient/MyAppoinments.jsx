@@ -265,7 +265,7 @@ const MyAppointments = () => {
     (a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status),
   );
 
-  const counts = (appointments ?? []).reduce((acc, a) => {
+  const counts = (appointments ?? [])?.reduce((acc, a) => {
     acc[a.status] = (acc[a.status] ?? 0) + 1;
     return acc;
   }, {});
