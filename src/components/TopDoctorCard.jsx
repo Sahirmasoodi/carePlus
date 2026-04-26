@@ -1,30 +1,48 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const TopDoctorCard = ({ name, image, speciality, id, isAvailable }) => {
-  console.log(image);
-  
+  const navigate = useNavigate();
+
   return (
-    <div className="border rounded-lg hover:-translate-y-3 transition-all duration-500 cursor-pointer">
-      <div className="bg-blue-100 rounded-t-lg flex justify-center">
-        <img className="w-52 min-w-40 h-52 rounded-t-lg" src={image || "/doc.png"}  />
+    <div
+      className="group bg-white border border-gray-100 rounded-xl overflow-hidden
+                 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+    >
+      <div
+        className={`relative overflow-hidden ${isAvailable ? "bg-sky-50" : "bg-gray-50"}`}
+      >
+        <img
+          src={image || "/doc.png"}
+          alt={name}
+          className="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+
+        <span
+          className={`absolute top-3 left-3 inline-flex items-center gap-1.5 text-[10px] font-semibold
+                      px-2.5 py-1 rounded-full border backdrop-blur-sm
+                      ${
+                        isAvailable
+                          ? "bg-emerald-50/90 text-emerald-600 border-emerald-200"
+                          : "bg-red-50/90 text-red-500 border-red-200"
+                      }`}
+        >
+          <span
+            className={`w-1.5 h-1.5 rounded-full ${isAvailable ? "bg-emerald-400 animate-pulse" : "bg-red-400"}`}
+          />
+          {isAvailable ? "Available" : "Unavailable"}
+        </span>
       </div>
 
-      <div className="ps-3 py-4">
-        <div
-          className={`text-[11px] flex items-center gap-1 ${
-            isAvailable ? "text-green-500" : "text-red-500"
-          }`}
-        >
-          <p
-            className={`size-1.5 rounded-full ${
-              isAvailable ? "bg-green-500" : "bg-red-500"
-            }`}
-          ></p>
-          {isAvailable ? "Available" : "Not Available"}
-        </div>
-
-        <h3 className="text-sm text-gray-800 capitalize">{name}</h3>
-        <p className="text-[11px] text-gray-400 capitalize">{speciality}</p>
+      <div className="p-4">
+        <h3 className="text-sm font-bold text-gray-900 capitalize leading-tight truncate">
+          {name}
+        </h3>
+        {speciality && (
+          <p className="text-xs text-indigo-500 font-medium capitalize mt-0.5 truncate">
+            {speciality}
+          </p>
+        )}
       </div>
     </div>
   );
