@@ -1,37 +1,72 @@
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import { FaPaperPlane, FaUserCircle } from "react-icons/fa";
 import { createSocketConnection } from "../../utils/socketConnection";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useRef } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer";
+import { useParams } from "react-router-dom";
+import { fetchChats } from "../../store/slices/chat/chat.thunk";
 
 const ChatUI = () => {
-  const messages = [
-    { text: "Hello doctor!", sender: "me" },
-    { text: "Hi, how can I help you?", sender: "doctor" },
-    { text: "I have a headache", sender: "me" },
-  ];
   const { user } = useSelector((store) => store.common.auth);
+  const { chat } = useSelector((store) => store.common.chat);
+  const fetchedMessages = chat?.messages;
+
+  const dispatch = useDispatch();
+  const [message, setMessage] = useState("");
+  const [data, setData] = useState([]);
+  const { toUserId } = useParams();
+
+  const messagesEndRef = useRef(null);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [data]);
+
+  useEffect(() => {
+    dispatch(fetchChats(toUserId));
+  }, [dispatch, toUserId]);
+
+  useEffect(() => {
+    if (fetchedMessages) {
+      setData(fetchedMessages);
+    }
+  }, [fetchedMessages]);
 
   useEffect(() => {
     const socket = createSocketConnection();
 
-    socket.on("connect", () => {
-      console.log("Connected:", socket.id);
-      socket.emit("joinChat", { data: "walai bobai" });
+    socket.emit("joinChat", { senderId: user?._id, recieverId: toUserId });
+
+    socket.on("messageRecieved", ({ messageData }) => {
+      console.log("messageRecieved", messageData);
+
+      setData((pre) => [...pre, messageData]);
     });
 
     return () => {
       socket.disconnect();
     };
-  }, []);
-  console.log("im heere");
+  }, [toUserId, user?._id]);
+
+  function handleSendMessage() {
+    const socket = createSocketConnection();
+
+    socket.emit("sendMessage", {
+      senderId: user?._id,
+      recieverId: toUserId,
+      text: message,
+    });
+  }
 
   return (
     <>
-    <Navbar role={user?.role}/>
-      <div className="h-screen flex bg-gray-100">
+      <Navbar role={user?.role} />
+      <div className="h-[50vh] flex bg-gray-100">
         {/* Sidebar */}
         <div className="w-1/4 bg-white border-r hidden md:block">
           <div className="p-4 font-semibold text-lg border-b">Chats</div>
@@ -63,21 +98,22 @@ const ChatUI = () => {
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
-            {messages.map((msg, i) => (
+            {data.map((msg, i) => (
               <div
                 key={i}
                 className={`flex ${
-                  msg.sender === "me" ? "justify-end" : "justify-start"
+                  msg?.sender === "me" ? "justify-end" : "justify-start"
                 }`}
               >
                 <div
+                  ref={messagesEndRef}
                   className={`px-4 py-2 rounded-2xl max-w-xs text-sm ${
-                    msg.sender === "me"
+                    msg?.sender === "me"
                       ? "bg-purple-600 text-white"
                       : "bg-white shadow"
                   }`}
                 >
-                  {msg.text}
+                  {msg}
                 </div>
               </div>
             ))}
@@ -86,17 +122,22 @@ const ChatUI = () => {
           {/* Input */}
           <div className="p-4 bg-white border-t flex items-center gap-3">
             <input
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               type="text"
               placeholder="Type a message..."
               className="flex-1 border rounded-xl px-4 py-2 outline-none"
             />
-            <button className="bg-purple-600 text-white p-3 rounded-xl hover:bg-purple-700">
+            <button
+              onClick={handleSendMessage}
+              className="bg-purple-600 text-white p-3 rounded-xl hover:bg-purple-700"
+            >
               <FaPaperPlane />
             </button>
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

@@ -157,7 +157,7 @@ const AppointmentCard = ({ apt }) => {
         <div className="flex justify-end gap-2">
           {apt.status !== "cancelled" && (
             <button
-              onClick={() => navigate(`/chat/${apt.doctor?._id}`)}
+              onClick={() => navigate(`/chat/${apt.patient?._id}`)}
               className="inline-flex items-center gap-1.5 text-xs font-semibold
                                     text-indigo-600 bg-indigo-50 border border-indigo-100
                                     hover:bg-indigo-100 px-3 py-1.5 rounded-xl
@@ -206,7 +206,7 @@ const DoctorAppointments = () => {
       <div className="mx-auto">
         <div className="mb-8 heading-style">
           <h1 className="text-4xl font-extrabold text-gray-900">
-           Patient Appointments
+            Patient Appointments
           </h1>
           <p className="text-gray-400 text-sm mt-1">
             View and manage appointments scheduled with your patients
