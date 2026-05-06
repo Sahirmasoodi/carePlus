@@ -28,7 +28,7 @@ const Navbar = ({ role = "public" }) => {
   return (
     <div className="flex justify-between items-center pt-5 pb-2 border-b border-gray-300 -mx-10 sm:mx-0 ">
       <div>
-        <img className="min-w-40 w-44 mx-2" src={assets.logo} />
+        <img className=" w-36 sm:w-44 mx-2" src={assets.logo} />
       </div>
       <div className="  hidden  md:flex justify-end gap-x-5 w-1/2">
         {navData?.map((nav, i) => (
