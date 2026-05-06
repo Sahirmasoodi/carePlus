@@ -13,6 +13,8 @@ const ChatUI = () => {
   const { user } = useSelector((store) => store.common.auth);
   const { chat } = useSelector((store) => store.common.chat);
   const fetchedMessages = chat?.messages;
+  const reciever = chat?.participants?.find((par) => par._id !== user._id);
+  // console.log(chat);
 
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
@@ -39,7 +41,7 @@ const ChatUI = () => {
 
   useEffect(() => {
     const socket = createSocketConnection();
-
+    socket.emit("register", { userId: user?._id });
     socket.emit("joinChat", { senderId: user?._id, recieverId: toUserId });
 
     socket.on("messageRecieved", ({ messageData }) => {
@@ -81,7 +83,9 @@ const ChatUI = () => {
                 <FaUserCircle className="text-2xl text-gray-500" />
               </div>
               <div>
-                <p className="font-semibold text-white">Dr. Sarah Khan</p>
+                <p className="font-semibold text-white capitalize">
+                  {reciever?.firstName + " " + reciever?.lastName}
+                </p>
                 <p className="text-xs text-green-500">● Online</p>
               </div>
             </div>

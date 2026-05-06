@@ -118,30 +118,58 @@ const AppointmentCard = ({ apt }) => {
           </span>
         </div>
 
-        <div className="bg-gray-50 rounded-2xl p-3 mb-4 flex justify-between text-center">
-          <div>
-            <p className="text-xs text-gray-400">Start</p>
-            <p className="font-bold text-sm">
-              {formatTime(apt.appointmentStartTime)}
-            </p>
-            <p className="text-xs text-gray-400">
-              {formatDay(apt.appointmentStartTime)}
-            </p>
-          </div>
+        <div className="flex flex-col gap-3 mb-4">
+          {apt.appointmentTime.map((slot, index) => (
+            <div
+              key={slot._id ?? index}
+              className="bg-gray-50 rounded-2xl p-3.5"
+            >
+              {apt.appointmentTime.length > 1 && (
+                <p className="text-[10px] text-indigo-400 font-semibold uppercase tracking-wider mb-2">
+                  Slot {index + 1}
+                </p>
+              )}
+              <div className="flex items-center justify-between">
+                <div className="text-center">
+                  <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">
+                    Start
+                  </p>
+                  <p className="text-sm font-bold text-gray-800">
+                    {formatTime(slot.appointmentStartTime)}
+                  </p>
+                  <p className="text-[11px] text-gray-400">
+                    {formatDay(slot.appointmentStartTime)}
+                  </p>
+                </div>
 
-          <div className="text-xs text-[#606FFD] font-semibold">
-            {getDuration(apt.appointmentStartTime, apt.appointmentEndTime)}
-          </div>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="flex items-center gap-1">
+                    <div className="w-8 h-px bg-gray-200" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-300" />
+                    <div className="w-8 h-px bg-gray-200" />
+                  </div>
+                  <span className="text-[10px] font-semibold text-indigo-400 bg-indigo-50 px-2 py-0.5 rounded-full">
+                    {getDuration(
+                      slot.appointmentStartTime,
+                      slot.appointmentEndTime,
+                    )}
+                  </span>
+                </div>
 
-          <div>
-            <p className="text-xs text-gray-400">End</p>
-            <p className="font-bold text-sm">
-              {formatTime(apt.appointmentEndTime)}
-            </p>
-            <p className="text-xs text-gray-400">
-              {formatDay(apt.appointmentEndTime)}
-            </p>
-          </div>
+                <div className="text-center">
+                  <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">
+                    End
+                  </p>
+                  <p className="text-sm font-bold text-gray-800">
+                    {formatTime(slot.appointmentEndTime)}
+                  </p>
+                  <p className="text-[11px] text-gray-400">
+                    {formatDay(slot.appointmentEndTime)}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         <div className="flex flex-wrap gap-2 mb-4">

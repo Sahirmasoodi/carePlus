@@ -41,8 +41,10 @@ const CreateAppointment = () => {
       doctor: doctorId,
       patient: user?._id,
       status: "pending",
-      appointmentStartTime: new Date(data.appointmentStartTime).toISOString(),
-      appointmentEndTime: new Date(data.appointmentEndTime).toISOString(),
+      appointmentTime: {
+        appointmentStartTime: new Date(data.appointmentStartTime).toISOString(),
+        appointmentEndTime: new Date(data.appointmentEndTime).toISOString(),
+      },
     };
 
     const res = await dispatch(
