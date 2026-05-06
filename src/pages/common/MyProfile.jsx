@@ -528,6 +528,7 @@ const NoProfile = () => (
 const MyProfile = () => {
   const dispatch = useDispatch();
   const { profile, loading } = useSelector((store) => store.common.profile);
+  const { user } = useSelector((store) => store.common.auth);
   const [showEdit, setShowEdit] = useState(false);
   const [showPw, setShowPw] = useState(false);
 
@@ -566,11 +567,10 @@ const MyProfile = () => {
 
   return (
     <>
-      <Navbar role={role} />
+      <Navbar role={user?.role} />
 
       <div className="min-h-screen py-8">
         <div className="mx-auto space-y-5">
-          {/* ── Hero card ─────────────────────────────── */}
           <div className="relative bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/60 overflow-hidden">
             <div className="h-28 bg-[#606FFD]" />
             <div className="px-6 pb-4">
@@ -636,7 +636,6 @@ const MyProfile = () => {
             </div>
           </div>
 
-          {/* ── Personal info ──────────────────────────── */}
           <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/40 p-6">
             <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-1">
               Personal Info
@@ -663,7 +662,6 @@ const MyProfile = () => {
             )}
           </div>
 
-          {/* ── Professional ───────────────────────────── */}
           {(department || specialization || experience || licenseNumber) && (
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/40 p-6">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-1">
@@ -700,7 +698,6 @@ const MyProfile = () => {
             </div>
           )}
 
-          {/* ── Qualifications ─────────────────────────── */}
           {qualification.length > 0 && (
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/40 p-6">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
@@ -719,7 +716,6 @@ const MyProfile = () => {
             </div>
           )}
 
-          {/* ── Available days ─────────────────────────── */}
           {availableDays.length > 0 && (
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/40 p-6">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
@@ -757,7 +753,6 @@ const MyProfile = () => {
             </div>
           )}
 
-          {/* ── Account ────────────────────────────────── */}
           <div className="bg-white rounded-3xl border border-gray-100 shadow-sm shadow-indigo-100/40 p-6">
             <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-1">
               Account

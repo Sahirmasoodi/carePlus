@@ -3,6 +3,7 @@ import authReducer from "./slices/auth/auth.slice";
 import appointmentReducer from "./slices/appointments/appointment.slice";
 import profileReducer from "./slices/profile/profile.slice";
 import patientReducer from "./slices/patient/patient.slice";
+import chatReducer from "./slices/chat/chat.slice";
 import publicReducer from "./slices/public/public.slice";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
@@ -10,11 +11,12 @@ import storage from "redux-persist/lib/storage";
 const CommonReducer = combineReducers({
   auth: authReducer,
   appointment: appointmentReducer,
-  profile:profileReducer,
-  public:publicReducer,
+  profile: profileReducer,
+  public: publicReducer,
+  chat: chatReducer,
 });
 const PatientReducer = combineReducers({
-  patient:patientReducer
+  patient: patientReducer,
 });
 const persistConfig = {
   key: "common",
@@ -27,7 +29,7 @@ const persistedCommonReducer = persistReducer(persistConfig, CommonReducer);
 const appStore = configureStore({
   reducer: {
     common: persistedCommonReducer,
-    patient :PatientReducer
+    patient: PatientReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
