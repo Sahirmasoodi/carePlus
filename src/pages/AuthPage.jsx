@@ -100,7 +100,7 @@ export default function AuthPage() {
       </aside>
       <section className="auth-content">
         <div className="auth-box">
-          <Link className="back-home me-10" to="/" >
+          <Link className="back-home me-10" to="/">
             <ArrowLeft size={14} /> Back
           </Link>
           <div className="auth-mobile-brand">
